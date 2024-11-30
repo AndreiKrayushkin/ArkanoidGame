@@ -7,7 +7,8 @@ namespace ArkanoidGame
 {
 	void GameStateMainMenuData::init()
 	{
-		assert(font.loadFromFile(RESOURCES_PATH + "Fonts/Roboto-Regular.ttf"));
+		auto res = font.loadFromFile(RESOURCES_PATH + "Fonts/Roboto-Regular.ttf");
+		assert(res);
 
 		MenuItem startGame;
 		startGame.text.setString("Start Game");

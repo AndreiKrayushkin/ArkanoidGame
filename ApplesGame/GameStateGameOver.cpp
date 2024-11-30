@@ -11,7 +11,8 @@ namespace ArkanoidGame
 
 	void GameStateGameOverData::init()
 	{
-		assert(font.loadFromFile(RESOURCES_PATH + "Fonts/Roboto-Regular.ttf"));
+		auto res = font.loadFromFile(RESOURCES_PATH + "Fonts/Roboto-Regular.ttf");
+		assert(res);
 
 		timeSinceGameOver = 0.f;
 

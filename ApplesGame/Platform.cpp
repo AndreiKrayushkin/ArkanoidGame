@@ -7,41 +7,32 @@
 
 namespace ArkanoidGame
 {
-	void Platform::initPlatform()
-	{
-		assert(texture.loadFromFile(TEXTURES_PATH + "platform.png"));
-		
-		initSprite(sprite, PLATFORM_WIDTH, PLATFORM_HEIGHT, texture);
-		sprite.setPosition({ SCREEN_WIDTH / 2.0, SCREEN_HEIGHT - PLATFORM_HEIGHT / 2.f });
-	}
+	Platform::Platform(const sf::Vector2f& position)
+		: GameObject(TEXTURES_PATH + "platform.png", position, PLATFORM_WIDTH, PLATFORM_HEIGHT)
+	{}
 
-	void Platform::updatePlatform(float timeDelta)
+	void Platform::update(float timeDelta)
 	{
 		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left))
 		{
-			movePlatform(-timeDelta * PLATFORM_SPEED);
+			move(-timeDelta * PLATFORM_SPEED);
 		}
 		else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right))
 		{
-			movePlatform(timeDelta * PLATFORM_SPEED);
+			move(timeDelta * PLATFORM_SPEED);
 		}
 	}
 
-	void Platform::movePlatform(float speed)
+	bool Platform::getCollision(std::shared_ptr<GameObject> gameObject)
 	{
-		auto position = sprite.getPosition();
-		position.x = std::clamp(position.x + speed, PLATFORM_WIDTH / 2.f, SCREEN_WIDTH  - PLATFORM_WIDTH / 2.f);
-		sprite.setPosition(position);
-	}
+		auto ball = std::dynamic_pointer_cast<Ball>(gameObject);
+		if (!ball) return false;
 
-	bool Platform::checkCollisionWithBall(const Ball& ball)
-	{
 		auto sqr = [](float x) {
 			return x * x;
-		};
-		
+			};
 		const auto rect = sprite.getGlobalBounds();
-		const auto ballPos = ball.getPosition();
+		const auto ballPos = ball->getPosition();
 		if (ballPos.x < rect.left) {
 			return sqr(ballPos.x - rect.left) + sqr(ballPos.y - rect.top) < sqr(BALL_SIZE / 2.0);
 		}
@@ -52,8 +43,26 @@ namespace ArkanoidGame
 
 		return std::fabs(ballPos.y - rect.top) <= BALL_SIZE / 2.0;
 	}
-	void Platform::drawPlatform(sf::RenderWindow& window)
+
+	void Platform::move(float speed)
 	{
-		window.draw(sprite);
+		auto position = sprite.getPosition();
+		position.x = std::clamp(position.x + speed, PLATFORM_WIDTH / 2.f, SCREEN_WIDTH  - PLATFORM_WIDTH / 2.f);
+		sprite.setPosition(position);
+	}
+
+	bool Platform::checkCollisionWithBall(std::shared_ptr<GameObject> gameObject)
+	{
+		auto ball = std::dynamic_pointer_cast<Ball>(gameObject);
+		if (!ball)
+			return false;
+
+		if (getCollision(ball)) {
+			auto rect = getRect();
+			auto ballPosInOlatform = (ball->getPosition().x - (rect.left + rect.width / 2)) / (rect.width / 2);
+			ball->changeAngle(90 - 20 * ballPosInOlatform);
+			return true;
+		}
+		return false;
 	}
 }

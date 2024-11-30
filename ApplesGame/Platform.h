@@ -1,27 +1,19 @@
 #pragma once
 #include "SFML/Graphics.hpp"
+#include "GameObject.h"
 
 namespace ArkanoidGame
 {
-	class Ball;
-
-	class Platform
+	class Platform : public GameObject
 	{
 	public:
-		void initPlatform();
-		void updatePlatform(float timeDelta);
-		bool checkCollisionWithBall(const Ball& ball);
-		void drawPlatform(sf::RenderWindow& window);
-
-		const sf::Vector2f& getPosition() const { return sprite.getPosition(); }
-		const sf::FloatRect& getRect() const { return sprite.getGlobalBounds(); }
-
-	protected:
-		sf::Sprite sprite;
-		sf::Texture texture;
+		Platform(const sf::Vector2f& position);
+		void update(float timeDelta);
+		bool getCollision(std::shared_ptr<GameObject> gameObject);
+		bool checkCollisionWithBall(std::shared_ptr<GameObject> gameObject);
 
 	private:
-		void movePlatform(float speed);
+		void move(float speed);
 	};
 }
 

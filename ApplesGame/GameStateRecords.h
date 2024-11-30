@@ -1,12 +1,13 @@
 #pragma once
 #include <SFML/Graphics.hpp>
 #include <vector>
+#include "GameStateData.h"
 
 namespace ArkanoidGame
 {
 	class Game;
 
-	class GameStateRecordsData
+	class GameStateRecordsData : public GameStateData
 	{
 	public:
 		void init();

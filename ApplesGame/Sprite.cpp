@@ -59,4 +59,9 @@ namespace ArkanoidGame
 		const auto result = spriteTo.getPosition() - spriteFrom.getPosition();
 		return std::fabs(result.x) + std::fabs(result.y);
 	}
+
+	void drawSprite(const sf::Sprite& sprite, sf::RenderWindow& window)
+	{
+		window.draw(sprite);
+	}
 }

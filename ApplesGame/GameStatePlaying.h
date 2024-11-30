@@ -3,12 +3,14 @@
 #include "SFML/Audio.hpp"
 #include "Platform.h"
 #include "Ball.h"
+#include "GameStateData.h"
 
 namespace ArkanoidGame
 {
 	class Game;
+	class Block;
 
-	class GameStatePlayingData
+	class GameStatePlayingData : public GameStateData
 	{
 	public:
 		void init();
@@ -17,14 +19,19 @@ namespace ArkanoidGame
 		void draw(sf::RenderWindow& window);
 
 	private:
+		void createBlocks();
+		void drawBlocks(sf::RenderWindow& window);
+		void getBallInverse(const sf::Vector2f& ballPos, const sf::FloatRect& blockRect, bool& needInverseDirX, bool& needInverseDirY);
+
+	private:
 		sf::Texture appleTexture;
 		sf::Texture rockTexture;
 		sf::Font font;
 		sf::SoundBuffer eatAppleSoundBuffer;
 		sf::SoundBuffer gameOverSoundBuffer;
 
-		Platform platform;
-		Ball ball;
+		std::vector<std::shared_ptr<GameObject>> gameObjects;
+		std::vector<std::shared_ptr<Block>> blocks;
 
 		sf::Text scoreText;
 		sf::Text inputHintText;

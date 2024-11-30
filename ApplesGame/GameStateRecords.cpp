@@ -10,7 +10,8 @@ namespace ArkanoidGame
 {
 	void GameStateRecordsData::init()
 	{
-		assert(font.loadFromFile(RESOURCES_PATH + "Fonts/Roboto-Regular.ttf"));
+		auto res = font.loadFromFile(RESOURCES_PATH + "Fonts/Roboto-Regular.ttf");
+		assert(res);
 
 		titleText.setString("RECORDS");
 		titleText.setFont(font);

@@ -27,4 +27,6 @@ namespace ArkanoidGame
 		}
 		return false;
 	}
+
+	void drawSprite(const sf::Sprite& sprite, sf::RenderWindow& window);
 }

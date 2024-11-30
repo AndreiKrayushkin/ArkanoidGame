@@ -7,7 +7,8 @@ namespace ArkanoidGame
 {
 	void GameStatePauseMenuData::init()
 	{
-		assert(font.loadFromFile(RESOURCES_PATH + "Fonts/Roboto-Regular.ttf"));
+		auto res = font.loadFromFile(RESOURCES_PATH + "Fonts/Roboto-Regular.ttf");
+		assert(res);
 
 		background.setFillColor(sf::Color(0, 0, 0, 128));
 

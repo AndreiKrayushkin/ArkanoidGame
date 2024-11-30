@@ -1,12 +1,13 @@
 #pragma once
 #include <SFML/Graphics.hpp>
 #include "Menu.h"
+#include "GameStateData.h"
 
 namespace ArkanoidGame
 {
 	class Game;
 
-	class GameStatePauseMenuData
+	class GameStatePauseMenuData : public GameStateData
 	{
 	public:
 		void init();

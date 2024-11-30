@@ -5,20 +5,16 @@
 
 namespace ArkanoidGame
 {
-	void Ball::initBall()
+	Ball::Ball(const sf::Vector2f& position)
+		: GameObject(TEXTURES_PATH + "ball.png", position, BALL_SIZE, BALL_SIZE)
 	{
-		assert(texture.loadFromFile(TEXTURES_PATH + "ball.png"));
-
-		initSprite(sprite, BALL_SIZE, BALL_SIZE, texture);
-		sprite.setPosition({ SCREEN_WIDTH / 2.0, SCREEN_HEIGHT - PLATFORM_HEIGHT - BALL_SIZE / 2.f });
-
-		const float angle = 45.f + rand() % 90;
+		const float angle = 90;
 		const auto pi = std::acos(-1.f);
 		direction.x = std::cos(pi / 180.f * angle);
 		direction.y = std::sin(pi / 180.f * angle);
 	}
 
-	void Ball::updateBall(float timeDelta)
+	void Ball::update(float timeDelta)
 	{
 		const auto pos = sprite.getPosition() + BALL_SPEED * timeDelta * direction;
 		sprite.setPosition(pos);
@@ -32,13 +28,21 @@ namespace ArkanoidGame
 		}
 	}
 
-	void Ball::contactWithPlatform()
+	void Ball::invertDirectionX()
+	{
+		direction.x *= -1;
+	}
+
+	void Ball::invertDirectionY()
 	{
 		direction.y *= -1;
 	}
 
-	void Ball::drawBall(sf::RenderWindow& window)
+	void Ball::changeAngle(float angle)
 	{
-		window.draw(sprite);
+		lastAngle = angle;
+		const auto pi = std::acos(-1.f);
+		direction.x = (angle / abs(angle)) * std::cos(pi / 180.f * angle);
+		direction.y = -1 * abs(std::sin(pi / 180.f * angle));
 	}
 }

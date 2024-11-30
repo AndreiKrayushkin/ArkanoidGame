@@ -1,25 +1,22 @@
 #pragma once
 #include "SFML/Graphics.hpp"
+#include "GameObject.h"
 
 namespace ArkanoidGame
 {
-	class Ball
+	class Ball : public GameObject
 	{
 	public:
-		void initBall();
-		void updateBall(float timeDelta);
-		void contactWithPlatform();
-		void drawBall(sf::RenderWindow& window);
+		Ball(const sf::Vector2f& position);
+		~Ball() = default;
+		void update(float timeDelta);
 
-		const sf::Vector2f& getPosition() const { return sprite.getPosition(); }
-		const sf::FloatRect& getRect() const { return sprite.getGlobalBounds(); }
-
-	protected:
-		sf::Sprite sprite;
-		sf::Texture texture;
-
+		void invertDirectionX();
+		void invertDirectionY();
+		void changeAngle(float angle);
 	private:
 		sf::Vector2f direction;
+		float lastAngle = 90;
 	};
 }
 

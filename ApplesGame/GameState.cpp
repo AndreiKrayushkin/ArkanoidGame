@@ -4,6 +4,7 @@
 #include "GameStatePauseMenu.h"
 #include "GameStateMainMenu.h"
 #include "GameStateRecords.h"
+#include "GameStateGameWin.h"
 
 #include <assert.h>
 
@@ -18,181 +19,62 @@ namespace ArkanoidGame
 		{
 		case GameStateType::MainMenu:
 		{
-			data = new GameStateMainMenuData();
-			((GameStateMainMenuData*)data)->init();
+			data = std::make_unique<GameStateMainMenuData>();
 			break;
 		}
 		case GameStateType::Playing:
 		{
-			data = new GameStatePlayingData();
-			((GameStatePlayingData*)data)->init();
+			data = std::make_unique<GameStatePlayingData>();
 			break;
 		}
 		case GameStateType::GameOver:
 		{
-			data = new GameStateGameOverData();
-			((GameStateGameOverData*)data)->init();
+			data = std::make_unique<GameStateGameOverData>();
+			break;
+		}
+		case GameStateType::GameWin:
+		{
+			data = std::make_unique<GameStateGameWin>();
 			break;
 		}
 		case GameStateType::ExitDialog:
 		{
-			data = new GameStatePauseMenuData();
-			((GameStatePauseMenuData*)data)->init();
+			data = std::make_unique<GameStatePauseMenuData>();
 			break;
 		}
 		case GameStateType::Records:
 		{
-			data = new GameStateRecordsData();
-			((GameStateRecordsData*)data)->init();
+			data = std::make_unique<GameStateRecordsData>();
 			break;
 		}
 		default:
 			assert(false); // We want to know if we forgot to implement new game state
 			break;
+		}
+		if (data) {
+			data->init();
 		}
 	}
 
 	GameState::~GameState()
 	{
 		if (data) {
-			switch (type)
-			{
-			case GameStateType::MainMenu:
-			{
-				delete ((GameStateMainMenuData*)data);
-				break;
-			}
-			case GameStateType::Playing:
-			{
-				delete ((GameStatePlayingData*)data);
-				break;
-			}
-			case GameStateType::GameOver:
-			{
-				delete ((GameStateGameOverData*)data);
-				break;
-			}
-			case GameStateType::ExitDialog:
-			{
-				delete ((GameStatePauseMenuData*)data);
-				break;
-			}
-			case GameStateType::Records:
-			{
-				delete ((GameStateRecordsData*)data);
-				break;
-			}
-			default:
-				assert(false); // We want to know if we forgot to implement new game state
-				break;
-			}
- 			
 			data = nullptr;
 		}
 	}
 
 	void GameState::update(float timeDelta)
 	{
-		switch (type)
-		{
-		case GameStateType::MainMenu:
-		{
-			((GameStateMainMenuData*)data)->update(timeDelta);
-			break;
-		}
-		case GameStateType::Playing:
-		{
-			((GameStatePlayingData*)data)->update(timeDelta);
-			break;
-		}
-		case GameStateType::GameOver:
-		{
-			((GameStateGameOverData*)data)->update(timeDelta);
-			break;
-		}
-		case GameStateType::ExitDialog:
-		{
-			((GameStatePauseMenuData*)data)->update(timeDelta);
-			break;
-		}
-		case GameStateType::Records:
-		{
-			((GameStateRecordsData*)data)->update(timeDelta);
-			break;
-		}
-		default:
-			assert(false); // We want to know if we forgot to implement new game state
-			break;
-		}
+		data->update(timeDelta);
 	}
 
 	void GameState::draw(sf::RenderWindow& window)
 	{
-		switch (type)
-		{
-		case GameStateType::MainMenu:
-		{
-			((GameStateMainMenuData*)data)->draw(window);
-			break;
-		}
-		case GameStateType::Playing:
-		{
-			((GameStatePlayingData*)data)->draw(window);
-			break;
-		}
-		case GameStateType::GameOver:
-		{
-			((GameStateGameOverData*)data)->draw(window);
-			break;
-		}
-		case GameStateType::ExitDialog:
-		{
-			((GameStatePauseMenuData*)data)->draw(window);
-			break;
-		}
-		case GameStateType::Records:
-		{
-			((GameStateRecordsData*)data)->draw(window);
-			break;
-		}
-		default:
-			assert(false); // We want to know if we forgot to implement new game state
-			break;
-		}
+		data->draw(window);
 	}
 
 	void GameState::handleWindowEvent(sf::Event& event)
 	{
-		switch (type)
-		{
-		case GameStateType::MainMenu:
-		{
-			((GameStateMainMenuData*)data)->handleWindowEvent(event);
-			break;
-		}
-		case GameStateType::Playing:
-		{
-			((GameStatePlayingData*)data)->handleWindowEvent(event);
-			break;
-		}
-		case GameStateType::GameOver:
-		{
-			((GameStateGameOverData*)data)->handleWindowEvent(event);
-			break;
-		}
-		case GameStateType::ExitDialog:
-		{
-			((GameStatePauseMenuData*)data)->handleWindowEvent(event);
-			break;
-		}
-		case GameStateType::Records:
-		{
-			((GameStateRecordsData*)data)->handleWindowEvent(event);
-			break;
-		}
-		default:
-			assert(false); // We want to know if we forgot to implement new game state
-			break;
-		}
+		data->handleWindowEvent(event);
 	}
 }
